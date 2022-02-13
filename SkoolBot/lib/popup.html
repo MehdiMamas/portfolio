@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkoolBot</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+        table {
+            font-family: Arial, Helvetica, sans-serif !important;
+            width: 100% !important;
+        }
+
+        td,
+        th {
+            padding: 8px !important;
+        }
+
+        tr {
+            background-color: #f2f6f6 !important;
+        }
+
+        tr {
+            max-height: 52px !important;
+        }
+
+        th {
+            text-align: left !important;
+            text-align: center !important;
+            color: white !important;
+        }
+
+        [id*='previewsTableType'] tbody {
+            width: 100%;
+        }
+
+        [id*='previewsTableType'] tbody tr:nth-child(1) {
+            height: 52px !important;
+            width: 500px !important;
+            position: fixed;
+            z-index: 10;
+        }
+
+        [id*='previewsTableType'] tbody tr:nth-child(2),
+        #emailsTable tbody tr:nth-child(2) {
+            margin-top: 52px !important;
+        }
+
+        [id*='previewsTableType'] tbody tr {
+            height: 38px;
+        }
+
+        #emailsTable tbody tr:nth-child(1) {
+            height: 52px !important;
+            width: 292px !important;
+            position: fixed;
+            z-index: 10;
+        }
+
+        #emailsTable tbody tr {
+            height: 38px;
+            transition: 0.3s;
+        }
+
+        #emailsTable tbody tr:hover {
+            height: 38px;
+            background: #6fb8ac !important;
+            color: white !important;
+        }
+
+        #dataAfterLogin {
+            transition: width .5s;
+        }
+
+        #emailsTable tbody {
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #A4D3CA;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #A9D18F;
+            border: 1px solid
+        }
+    </style>
+</head>
+
+<body style="background-color: #325b62 !important;color: white;">
+    <div id="dataAfterLogin" style="display: none;width: 300px;">
+        <div class="row"
+            style="font-size: 15px;margin: 0;padding: 3px 10px;border: 4px solid black;text-align: left;width: 100%;border-bottom: 0px solid !important;">
+            <div class="col-4">
+                <img src="./icons/1024.png" alt="" width="64px" height="64px">
+                SkoolBot
+            </div>
+            <div class="col-8" id="schoolStatusDate"
+                style="text-align: center;display: inline-flex;align-items: center;text-align: center;">
+                <span style="width: 100%;">
+                    School Status<br> as of
+                </span>
+            </div>
+        </div>
+        <table id="emailsTable"
+            style="border-left: 4px solid !important;display: grid;border-right: 4px solid !important;width: 300px !important;min-height: 52px;color: black;">
+            <tr class="row" style="width: 100%;margin: 0;background-color: #5ba09f !important;">
+                <th class="col-9" style="min-height: 100%;display: inline-flex;align-items: center;text-align: center;">
+                    <span style="width: 100%;">Category</span>
+                </th>
+                <th class="col-3" style="font-size: 12px;">
+                    Number of Items
+                </th>
+            </tr>
+            <tr @click="onMouseIn($event.target)" :data-field="email.type" v-for="(email, index) in emails" :key="index"
+                class="row categoriesSkoolBot" title="Click to Visit" style="width: 100%;margin: 0;">
+                <td class="col-9" style="min-height: 100%;display: inline-flex;align-items: center;text-align: center;">
+                    <span style="width: 100%;">{{ email.category}}</span>
+                </td>
+                <td class="col-3" style="font-size: 12px;text-align: center;">
+                    {{email.numberOfItems}}
+                </td>
+            </tr>
+        </table>
+        <div
+            style="display: inline-block;font-size: 15px;padding: 0 10px;border: 4px solid black;text-align: left;width: 100%;border-top: 0px solid !important;height: 46px;">
+            Get help and more tools at <a href="http://www.skoolbot.com" target="_blank"
+                style="position: absolute;bottom: 5px;left: 18px;color: white;">www.skoolbot.com</a>
+            <button class="btn btb-info"
+                style="position: absolute;right: 7px;bottom: 8px;padding: 1px;zoom: 0.8;width: 100px;background-color: #5ba09f ;"
+                id="signoutbtn">Sign Out</button>
+        </div>
+    </div>
+    <div id="loader" style="display: none;">
+        <img src="./icons/Loader.gif" alt="" width="100" height="100" style="margin: 60px 60px 60px 60px;">
+        <img src="./icons/1024.png" alt="" width="30" height="30" style="position: absolute;top: 94px;left: 95px;">
+        <span style="position: absolute;top: 170px;left: 55px;color: #28abb9;">Loading Class Info</span>
+    </div>
+    <div class="col s12 m6 offset-m3 center-align" id="signInGoogle"
+        style="padding: 11px 11px;display: block;width: 300px;">
+        <a class="oauth-container btn darken-4 white black-text" style="text-transform:none">
+            <div class="left">
+                <img width="20px" style="margin-right:8px" alt="Google sign-in"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+            </div>
+            Login with Google
+        </a>
+    </div>
+    <!-- <div class="col s12 m6 offset-m3 center-align" id="signOutGoogle"
+        style="padding: 11px 11px;display: block;width: 300px;">
+        <a class="oauth-container btn darken-4 white black-text" style="text-transform:none">
+            <div class="left">
+                <img width="20px" style="margin-right:8px" alt="Google sign-in"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+            </div>
+            Sign Out
+        </a>
+    </div> -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="./css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="./js/materialize.min.js"></script>
+    <script src="./js/vue.min.js"></script>
+    <script src="./js/popup.js"></script>
+</body>
+
+</html>

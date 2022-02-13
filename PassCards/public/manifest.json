@@ -1,0 +1,19 @@
+{
+	"name": "PassCards",
+	"version": "2.0",
+	"description": "",
+	"manifest_version": 2,
+	"content_security_policy": "script-src 'self' https://js.stripe.com/v3/; object-src 'self';",
+	"browser_action": {
+		"default_icon": "./icon.png"
+	},
+	"icons": {
+		"128": "./icon.png"
+	},
+	"chrome_url_overrides": {
+		"newtab": "index.html"
+	},
+	"permissions": [
+		"https://js.stripe.com/v3/"
+	]
+}

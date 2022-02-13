@@ -1,0 +1,43 @@
+{
+  "manifest_version": 2,
+  "name": "ScrapeGoogle",
+  "description": "",
+  "version": "2.2",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "web_accessible_resources": [
+    "*"
+  ],
+  "browser_action": {
+    "default_title": "ScrapeGoogle",
+    "default_icon": "/lib/icons/icon.png",
+    "default_popup": "./lib/popup.html"
+  },
+  "icons": {
+    "16": "/lib/icons/icon.png",
+    "48": "/lib/icons/icon.png",
+    "128": "/lib/icons/icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/search?*"
+      ],
+      "js": [
+        "./lib/js/content.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "jquery.min.js",
+      "bg.js"
+    ],
+    "persistent": true
+  },
+  "permissions": [
+    "storage",
+    "<all_urls>",
+    "http://*/*",
+    "https://*/*"
+  ]
+}

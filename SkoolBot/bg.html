@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Preview emails</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' https://upload.wikimedia.org 'unsafe-inline' 'unsafe-eval';">
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval';">
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
+    <style>
+        .center {
+            position: relative;
+        }
+
+        .center:nth-child() {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        table {
+            font-family: Arial, Helvetica, sans-serif !important;
+            width: 100% !important;
+        }
+
+        td,
+        th {
+            padding: 8px !important;
+        }
+
+        tr {
+            background-color: #f2f6f6 !important;
+        }
+
+        /* tr {
+            max-height: 52px !important;
+        } */
+
+        th {
+            text-align: left !important;
+            text-align: center !important;
+            background-color: #5ba09f !important;
+            color: white !important;
+        }
+
+        [id*='previewsTableType'] tbody {
+            width: 100%;
+            height: fit-content;
+        }
+
+        [id*='previewsTableType'] tbody tr:nth-child(1) {
+            height: 52px !important;
+            width: calc(100% - 8px);
+            position: fixed;
+            z-index: 10;
+        }
+
+        [id*='previewsTableType'] tbody tr:nth-child(2),
+        #emailsTable tbody tr:nth-child(2) {
+            margin-top: 52px !important;
+        }
+
+        [id*='previewsTableType'] tbody tr {
+            height: fit-content;
+            display: inline-flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        [id*='previewsTableType'] tbody tr:hover {
+            background: #6fb8ac !important;
+            color: white !important;
+        }
+
+        html {
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        a {
+            color: #1A1A7C !important;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #A4D3CA;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6fb8ac;
+            border: 1px solid
+        }
+    </style>
+</head>
+
+<body>
+    <div id="previewsAllTable"
+        style="width: 100% !important;color: black;overflow-x: hidden;overflow-y: auto;float: left;overflow-y: overlay;height: 461px;border: 4px solid #000;">
+        <table id="previewsTableType1" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span style="width: 100%;">Description</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='New Assignments')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span
+                        style="width: 100%;align-items: center;text-transform: capitalize;text-align: center;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;color: #1A1A7C !important;">{{email.Description}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType2" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Assignment Name</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Grade</span>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='Graded Assignments')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"><a :href="email.assignmentURL"
+                            target="_blank">{{email.assignmentName}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"
+                        :title="email.Message">{{email.Grade}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"
+                        :title="email.Message">{{email.DueDate}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType3" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Assignment Name</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 35%;max-width: 35%;">
+                    <span style="width: 100%;">Message</span>
+                </th>
+
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='Private Messages')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"><a :href="email.assignmentURL"
+                            target="_blank">{{email.assignmentName}}</a></span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"
+                        :title="email.Message">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 35%;max-width: 35%;">
+                    <span style="width: 100%;align-items: center;text-align: center;"
+                        :title="email.Message">{{email.Message}}</span>
+                </td>
+
+            </tr>
+        </table>
+        <table id="previewsTableType4" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 40%;max-width: 40%;">
+                    <span style="width: 100%;">Description/Question</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Type</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='Urgent Items')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 20%;max-width: 20%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 40%;max-width: 40%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;color: #1A1A7C !important;">{{email.Description}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.TypeOfAssignment}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType5" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span style="width: 100%;">Question</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='New Questions')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;color: #1A1A7C !important;">{{email.Description}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType6" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span style="width: 100%;">Announcement</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='New Announcements')[0].emails"
+                @click="goToAssLink($event.target)" :AssLink="email.assignmentURL" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 15%;max-width: 15%;">
+                    <span
+                        style="width: 100%;align-items: center;text-transform: capitalize;text-align: center;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 50%;max-width: 50%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.Description}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType7" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Teacher</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 40%;max-width: 40%;">
+                    <span style="width: 100%;">Material</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='New Materials')[0].emails" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;" @click="goToAssLink($event.target)"
+                :AssLink="email.assignmentURL">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.Teacher}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 40%;max-width: 40%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.Description}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType8" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;">Class</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;max-width: 65%;flex: 0 0 65%;">
+                    <span style="width: 100%;">Assignment Name</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='Overdue/Late Assignments')[0].emails" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;" @click="goToAssLink($event.target)"
+                :AssLink="email.assignmentURL">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 25%;max-width: 25%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        <a :href="email.ClassURL" target="_blank">{{email.Class}}</a>
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;max-width: 65%;flex: 0 0 65%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">{{email.assignmentName}}</span>
+                </td>
+            </tr>
+        </table>
+        <table id="previewsTableType9" style="width: 100% !important;display: none;">
+            <tr class="row" style="margin: 0;">
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 35%;max-width: 35%;">
+                    <span style="width: 100%;">Subject</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span style="width: 100%;">Due Date</span>
+                </th>
+                <th
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 55%;max-width: 55%;">
+                    <span style="width: 100%;">Message</span>
+                </th>
+            </tr>
+            <tr class="row" Title="Click for Details"
+                v-for="(email, index) in preview.filter(e=>e.type=='Messages from SkoolBot')[0].emails" :key="index"
+                style="width: 100%;margin: 0;min-height: 38px;">
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 35%;max-width: 35%;">
+                    <span style="width: 100%;align-items: center;text-align: center;">
+                        {{email.Subject}}
+                    </span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 10%;max-width: 10%;">
+                    <span
+                        style="width: 100%;align-items: center;text-align: center;text-transform: capitalize;">{{email.DueDate}}</span>
+                </td>
+                <td
+                    style="height: 38px;min-height: 100%;display: inline-flex;align-items: center;text-align: center;height: fit-content;position: relative;width: 100%;padding-right: 15px;padding-left: 15px;flex: 0 0 55%;max-width: 55%;">
+                    <span
+                        style="width: 100%;align-items: center;text-transform: capitalize;text-align: center;">{{email.Message}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="./lib/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="./lib/js/materialize.min.js"></script>
+    <script src="./lib/js/vue.min.js"></script>
+    <script src="./bgpopup.js"></script>
+</body>
+
+</html>

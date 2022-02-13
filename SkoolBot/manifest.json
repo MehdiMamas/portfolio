@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "SkoolBot Classroom Assistant",
+  "description": "Your simple-to-use dashboard for Google Classroom™",
+  "version": "5.0",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://maps.googleapis.com https://apis.google.com ;script-src-elem 'self' 'unsafe-eval' https://maps.googleapis.com https://apis.google.com 'unsafe-inline'; object-src 'self'",
+  "browser_action": {
+    "default_popup": "lib/popup.html",
+    "default_icon": "lib/icons/32.png"
+  },
+  "background": {
+    "scripts": [
+      "jquery.min.js",
+      "bg.js"
+    ],
+    "persistent": true
+  },
+  "icons": {
+    "16": "lib/icons/16.png",
+    "32": "lib/icons/32.png",
+    "40": "lib/icons/40.png",
+    "64": "lib/icons/64.png",
+    "100": "lib/icons/100.png",
+    "128": "lib/icons/128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/ryZdPfxtaSVzD5xEzVVRh8I2gJNoe+c/FuBo90C3TYTMpJrPO/eKNidGfB+Vm/gkQPgXpGy582z7dEM4YDq8c/WK18P73EXGJ5VFiKJOBGAfdRxKWRQdUgsCS919GDB/ErdicdFvdbhojVJTIhXdHI4qKRPl56q+z2VMsBqnStlBtXQrEfcXDJXki/Xvd3L8noWkMCi9hjas5p2fzoNHi5j9aOSDHxn7Y/mF8KyFM8FENIifJajUhC9BvcIezxrxjYzXreb3kLTfVnd+JWA49foXmdjZsmR8xpoEbO/c5pVZon+PfCicxb/UKkwKUMLHsdpf1G/0M4gFLmTk2zFwIDAQAB",
+  "oauth2": {
+    "client_id": "372054443225-oo8kgvak39jj2offfcddijlhrnb442i6.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly"
+    ]
+  },
+  "permissions": [
+    "notifications",
+    "storage",
+    "identity",
+    "identity.email",
+    "https://apis.google.com/*",
+    "https://accounts.google.com/*",
+    "http://extension.skoolbot.com/*",
+    "https://extension.skoolbot.com/*",
+    "https://script.googleusercontent.com/*"
+  ]
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>Data Scrapped</title>
+</head>
+
+<body style="background-color: #325b62 !important;color: white;">
+    <div id="app" style=" width:800px;transform:translateX(-50%);margin-left:50%;margin-top:20px;">
+        <h3>Search term : {{title}}</h3>
+        <h3>Number of articles : {{articlesLength}}</h3>
+        <h3>Name : {{data.text}}</h3>
+        <h3>Number of votes : {{data.times}}</h3>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">(Companies/Places)</th>
+                </tr>
+            </thead>
+            <tbody style=" background:white;color:black;">
+                <tr v-for="(item, index) in data.link" :key="index">
+                    <td><a :href="item" target="_blank">{{item.text}}</a> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="./js/vue.min.js"></script>
+    <script src="./js/index3.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+</body>
+
+</html>

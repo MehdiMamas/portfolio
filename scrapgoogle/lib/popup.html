@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+
+<body style="width: 350px;padding: 10px;">
+    <div id="loadingExtension">
+        <div style="margin-left:50%;transform:translatex(-50%);width: 100%;">
+            <img src="./icons/spinner.gif"
+                style="width: 250px;height: 250px;margin-left: 50%;transform: translatex(-50%);" alt="">
+        </div>
+    </div>
+    <div id="searching" style="display: none;">
+        <div style="margin-left:50%;transform:translatex(-50%);width: 100%;">
+            <img src="./icons/loader.gif"
+                style="width: 250px;height: 250px;margin-left: 50%;transform: translatex(-50%);" alt="">
+            <h6 id="progressH1" style=" width:100%;text-align:center;">articles of</h6>
+        </div>
+    </div>
+    <div id="searchingDone" style="display: none;">
+        <div
+            style="margin-left:50%;transform:translatex(-50%);width: 100%;border-bottom: 1px solid;margin-bottom: 10px;">
+            <h6 style="margin-left:50%;transform:translatex(-50%);width: max-content;">The searching is done</h6>
+            <progress max="100" value="100" style="margin-left:50%;transform:translatex(-50%);">100%</progress>
+            <button class="btn btn-dark" id="openResultsButton"
+                style="margin-left:50%;transform:translatex(-50%);margin-bottom: 10px;"><a href="" target="_blank"
+                    style=" text-decoration:auto;color:white;margin-bottom: 10px;">Open Results</a></button>
+        </div>
+        <label for="exclude">Exclude:</label><input type="text" name="exclude" id="exclude"><br>
+        <label for="include">Include:</label><input type="text" name="include" id="include"><br>
+        <label for="Articles">Articles:</label><input type="number" name="Articles" id="Articles"><br>
+        <button id="scrapBtn" class="btn btn-dark"
+            style="margin-left:50%;transform:translatex(-50%);margin-bottom:10px ;">New
+            Scrape</button>
+        <button id="excludeBtn" class="btn btn-dark" style="margin-left:50%;transform:translatex(-50%);">Exclude
+            Keywrods</button>
+    </div>
+    <div id="noSearchingDone" style="display: none;">
+        <div style="margin-left:50%;transform:translatex(-50%);width: 100%;">
+            <label for="exclude">Exclude:</label><input type="text" name="exclude" id="exclude"><br>
+            <label for="include">Include:</label><input type="text" name="include" id="include"><br>
+            <label for="Articles">Articles:</label><input type="text" name="Articles" id="Articles"><br>
+            <button id="scrapBtn" class="btn btn-dark"
+                style="margin-left:50%;transform:translatex(-50%);margin-bottom:10px ;">New
+                Scrape</button><br>
+            <button id="excludeBtn" class="btn btn-dark" style="margin-left:50%;transform:translatex(-50%);">Exclude
+                Keywrods</button>
+        </div>
+    </div>
+    <div id="ApiDone" style="display: none;">
+        <div style="margin-left:50%;transform:translatex(-50%);width: 100%;">
+            <h6 style="text-align:center;">You have only 50 uses if you want more upgrade your api</h6>
+        </div>
+    </div>
+    <script src="./js/popup.js"></script>
+</body>
+
+</html>
